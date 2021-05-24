@@ -1,6 +1,5 @@
 function CsvLineParser() {
   this.header = {}
-  console.log(this)
 
   let splitLine = (line) => {
     return line.split(",").map(c => c.replace(/("|')/g, ""))

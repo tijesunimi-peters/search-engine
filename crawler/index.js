@@ -1,3 +1,6 @@
+const Logger = require('./logger.js')
+Logger.start()
+
 const fs = require("fs")
 const path = require("path")
 const lineReader = require("line-reader")
@@ -13,6 +16,8 @@ lineReader.eachLine(SEEDER_PATH, function(line) {
   if(line.includes("Rank")) {
     csvLine.buildHeader(line);
   } else {
-    console.log(csvLine.parseRow(line))
+    parsedCsvRow = csvLine.parseRow(line);
+    webContent = webLoader(parsedCsvRow); 
+    console.log(webContent)
   }
 })

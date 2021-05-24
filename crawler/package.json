@@ -12,6 +12,7 @@
   "author": "Tijesunimi Peters",
   "license": "ISC",
   "dependencies": {
-    "line-reader": "^0.4.0"
+    "line-reader": "^0.4.0",
+    "morgan": "^1.10.0"
   }
 }
