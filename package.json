@@ -1,0 +1,24 @@
+{
+  "name": "search-engine",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tijesunimi-peters/search-engine.git"
+  },
+  "author": "Tijesunimi Peters",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tijesunimi-peters/search-engine/issues"
+  },
+  "homepage": "https://github.com/tijesunimi-peters/search-engine#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "line-reader": "^0.4.0",
+    "morgan": "^1.10.0"
+  }
+}

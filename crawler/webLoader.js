@@ -1,33 +1,39 @@
-const Logger = require('./logger.js')
-Logger.start()
-
+const fs = require("fs")
+const path = require("path")
 const https = require("https")
 const PageWriter = require("./pageWriter.js")
-const request = require("request")
+const axios = require("axios")
+const { MANIFEST_FILE } = require("../config/constants.js")
 
 const webLoader = function(parsedCsvRow) {
-  const responseParser = function(response) {
-    let content = ""
-    
-    response.on("data", function(chunk) {
-      content += chunk
-    })
+  console.log("Downloading ", parsedCsvRow.Domain);
 
-    response.on("error", function(err) {
-      throw err
-    })
+  const hashLocation = PageWriter.hashLocation(parsedCsvRow)
 
-    response.on("end", function() {
-      console.log(content)
+  if(PageWriter.pageExists(hashLocation.path)) {
+    console.log(`Page with url ${parsedCsvRow.Domain} already exists`)
+    return;
+  }
+
+  function writeManifest(err) {
+    if(err) throw err;
+    console.log(`[Finished downloading]: ${parsedCsvRow.Domain}`)
+    console.log(`Writing to manifest`)
+
+    fs.appendFile(path.join(MANIFEST_FILE), JSON.stringify({...hashLocation, ...parsedCsvRow}) + `\r\n`, function(err) {
+      if(err) throw err;
+
+      console.log(`[${parsedCsvRow.Domain}]: Written to manifest`)
     })
   }
 
-  console.log("Downloading ", parsedCsvRow.Domain);
-
-  request(`https://${parsedCsvRow.Domain}`, {}, function(err, res, body) {
-    if(err) return console.log(err);
-    console.log("Done with ", parsedCsvRow.Domain)
-  })
+  axios.get(`https://${parsedCsvRow.Domain}`)
+    .then(function(response) {
+      PageWriter.write(parsedCsvRow, response.data, writeManifest)
+    })
+    .catch(function(err) {
+      console.log(`[${parsedCsvRow.Domain}]: `, err.message)
+    })
 }
 
 
